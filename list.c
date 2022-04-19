@@ -41,7 +41,7 @@ void* list_at(List* self, int index)
     }
 }
 
-void* list_remove(List* self, int index)
+void* list_remove_at(List* self, int index)
 {
     self->length--;
     if (index >= 0) {
@@ -50,6 +50,16 @@ void* list_remove(List* self, int index)
     } else {
         return list_at(self, self->length - index);
     }
+}
+
+int list_remove(List* self, void* value)
+{
+    int removed = 0;
+    for (int i = 0; i < self->length; i++) {
+        if (self->values[i] == value)
+            list_remove_at(self, i--);
+    }
+    return removed;
 }
 
 size_t list_length(List* self)
