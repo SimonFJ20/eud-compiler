@@ -1,5 +1,5 @@
 
-OUT = bl
+OUT = euc
 
 CFLAGS = -std=c17 -Wall -Werror
 LFLAGS = 
