@@ -48,4 +48,20 @@ int linked_list_remove(LinkedList* self, void* value);
 size_t linked_list_length(LinkedList* self);
 void** linked_list_to_array(LinkedList* self);
 
+typedef struct ReaderStruct {
+    char (*getc)();
+    void (*delete)(struct ReaderStruct* self);
+} Reader;
+
+typedef struct FileReaderStruct {
+    char (*getc)();
+    void (*delete)(struct FileReaderStruct* self);
+    FILE* fp;
+} FileReader;
+
+FileReader* new_file_reader(FILE* fp);
+void delete_file_reader(FileReader* self);
+
+char file_reader_getc(FileReader* self);
+
 #endif

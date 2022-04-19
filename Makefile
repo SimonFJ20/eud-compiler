@@ -10,7 +10,9 @@ LD = gcc
 OFILES = \
 	main.o \
 	list.o \
-	linked_list.o
+	linked_list.o \
+	reader.o \
+	lexer.o 
 
 HEADERS = $(wildcard *.h)
 

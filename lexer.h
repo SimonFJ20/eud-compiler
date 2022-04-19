@@ -1,6 +1,8 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+#include "utils.h"
+#include <stdbool.h>
 #include <stdlib.h>
 
 typedef enum {
@@ -24,5 +26,24 @@ typedef struct {
 
 Token* new_token(TokenType type, const char* value, size_t length);
 void delete_token(Token* self);
+
+typedef struct {
+    bool done;
+    Token* value;
+} LexerIteration;
+
+LexerIteration* new_lexer_iteration(bool done, Token* value);
+void delete_lexer_iteration(LexerIteration* self);
+Token* lexer_iteration_unwrap(LexerIteration* self);
+
+typedef struct {
+    size_t index;
+    Reader reader;
+} Lexer;
+
+Lexer* new_lexer();
+void delete_lexer(Lexer* self);
+
+LexerIteration* lexer_next(Lexer* self);
 
 #endif
