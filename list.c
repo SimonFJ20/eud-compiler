@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <assert.h>
 #include "utils.h"
 
 List* new_list()
@@ -19,8 +20,8 @@ void delete_list(List* self)
 
 void list_add(List* self, void* value)
 {
-    self->length++;
     if (self->length == 0) {
+        self->length++;
         self->values = calloc(1, sizeof (void*));
         self->values[0] = value;
     } else {
@@ -33,7 +34,7 @@ void list_add(List* self, void* value)
 void* list_at(List* self, int index)
 {
     if (index >= 0) {
-        ASSERT(index < self->length, "index out of bounds");
+        assert(index < self->length);
         return self->values[index];
     } else {
         return list_at(self, self->length - index);
@@ -44,7 +45,7 @@ void* list_remove(List* self, int index)
 {
     self->length--;
     if (index >= 0) {
-        ASSERT(index < self->length, "index out of bounds");
+        assert(index < self->length);
         return self->values[index];
     } else {
         return list_at(self, self->length - index);
