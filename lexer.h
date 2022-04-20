@@ -37,13 +37,16 @@ void delete_lexer_iteration(LexerIteration* self);
 Token* lexer_iteration_unwrap(LexerIteration* self);
 
 typedef struct {
-    size_t index;
-    Reader reader;
+    Reader* reader;
+    char c;
 } Lexer;
 
 Lexer* new_lexer();
 void delete_lexer(Lexer* self);
 
 LexerIteration* lexer_next(Lexer* self);
+LexerIteration* lexer_make_int(Lexer* self);
+void lexer_fail_unexpected_char(Lexer* self);
+void lexer_next_char(Lexer* self);
 
 #endif

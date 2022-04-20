@@ -49,12 +49,12 @@ size_t linked_list_length(LinkedList* self);
 void** linked_list_to_array(LinkedList* self);
 
 typedef struct ReaderStruct {
-    char (*getc)();
+    char (*getc)(struct ReaderStruct* self);
     void (*delete)(struct ReaderStruct* self);
 } Reader;
 
 typedef struct FileReaderStruct {
-    char (*getc)();
+    char (*getc)(struct FileReaderStruct* self);
     void (*delete)(struct FileReaderStruct* self);
     FILE* fp;
 } FileReader;
