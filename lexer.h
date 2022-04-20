@@ -37,6 +37,8 @@ void delete_lexer_iteration(LexerIteration* self);
 Token* lexer_iteration_unwrap(LexerIteration* self);
 
 typedef struct {
+    bool done;
+    bool shouldStep;
     Reader* reader;
     char c;
 } Lexer;

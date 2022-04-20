@@ -1,13 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "lexer.h"
 
 Token* new_token(TokenType type, const char* value, size_t length) 
 {
+    char* valuestr = calloc(length, sizeof (char));
+    memcpy(valuestr, value, length);
     Token* self = calloc(1, sizeof (Token));
     *self = (Token) {
         .type = type,
-        .value = value,
+        .value = valuestr,
         .length = length,
     };
     return self;
@@ -44,6 +47,8 @@ Lexer* new_lexer(Reader* reader)
 {
     Lexer* self = calloc(1, sizeof (Lexer));
     *self = (Lexer) {
+        .done = false,
+        .shouldStep = true,
         .reader = reader,
         .c = '\0',
     };
@@ -57,15 +62,34 @@ void delete_lexer(Lexer* self)
 
 LexerIteration* lexer_next(Lexer* self)
 {
-    lexer_next_char(self);
+    if (self->done)
+        return new_lexer_iteration(true, NULL);
+    if (self->shouldStep)
+        lexer_next_char(self);
+    self->shouldStep = true;
     if (self->c >= 48 && self->c <= 57) {
         return lexer_make_int(self);
     } else {
         switch (self->c) {
-        case 1:
+        case '(':
+            return new_lexer_iteration(false, new_token(TT_LPAREN, &self->c, 1));
+        case ')':
+            return new_lexer_iteration(false, new_token(TT_RPAREN, &self->c, 1));
+        case '{':
+            return new_lexer_iteration(false, new_token(TT_LBRACE, &self->c, 1));
+        case '}':
+            return new_lexer_iteration(false, new_token(TT_RBRACE, &self->c, 1));
+        case '[':
+            return new_lexer_iteration(false, new_token(TT_LBRACKET, &self->c, 1));
+        case ']':
+            return new_lexer_iteration(false, new_token(TT_RBRACKET, &self->c, 1));
+        case ';':
+            return new_lexer_iteration(false, new_token(TT_LBRACE, &self->c, 1));
+        case EOF:
+            return new_lexer_iteration(self->done = true, NULL);
         default:
             lexer_fail_unexpected_char(self);
-            exit(1);
+            return NULL;
         }
     }
 }
